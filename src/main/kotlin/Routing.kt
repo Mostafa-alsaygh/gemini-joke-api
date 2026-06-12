@@ -78,7 +78,7 @@ private fun generateIraqiJoke(word: String): String {
 
     val client = HttpClient.newHttpClient()
     val request = HttpRequest.newBuilder()
-        .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=$apiKey")) //todo change it to flash 3.5
+        .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=$apiKey"))
         .header("Content-Type", "application/json")
         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
         .build()
@@ -96,11 +96,11 @@ private fun escapeJsonString(value: String): String {
     builder.append("\"")
     for (char in value) {
         when (char) {
-            '\\' -> builder.append("\\\\")
-            '\"' -> builder.append("\\\"")
-            '\n' -> builder.append("\\n")
-            '\r' -> builder.append("\\r")
-            '\t' -> builder.append("\\t")
+            '\\' -> builder.append("")
+            '\"' -> builder.append("")
+            '\n' -> builder.append("")
+            '\r' -> builder.append("")
+            '\t' -> builder.append("")
             else -> {
                 if (char.code < 0x20) {
                     builder.append(String.format("\\u%04x", char.code))
