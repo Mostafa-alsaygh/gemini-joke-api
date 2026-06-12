@@ -558,9 +558,11 @@ fun Application.configureRouting() {
         }
     }
 }
-//AQ.Ab8RN6IUVJ-2A8_hLpYZFnbJ0XTw0_Y7nMMKiMG5bvb2d7ZhEA
 private fun generateIraqiJoke(word: String): String {
-    val apiKey = System.getenv("GEMINI_API_KEY") ?: "AQ.Ab8RN6IUVJ-2A8_hLpYZFnbJ0XTw0_Y7nMMKiMG5bvb2d7ZhEA"
+    val apiKey = System.getenv("GEMINI_API_KEY")
+    if (apiKey.isNullOrBlank()) {
+        throw RuntimeException("GEMINI_API_KEY environment variable is not configured. Please set it in your Railway settings.")
+    }
     val randomId = UUID.randomUUID().toString()
 
     val prompt = """
@@ -585,8 +587,9 @@ private fun generateIraqiJoke(word: String): String {
 
     val client = HttpClient.newHttpClient()
     val request = HttpRequest.newBuilder()
-        .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=$apiKey"))
+        .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent"))
         .header("Content-Type", "application/json")
+        .header("x-goog-api-key", apiKey)
         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
         .build()
 
