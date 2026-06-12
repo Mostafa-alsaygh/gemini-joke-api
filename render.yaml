@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: gemini-joke-api
+    runtime: docker
+    plan: free
+    envVars:
+      - key: GEMINI_API_KEY
+        value: AQ.Ab8RN6IUVJ-2A8_hLpYZFnbJ0XTw0_Y7nMMKiMG5bvb2d7ZhEA
