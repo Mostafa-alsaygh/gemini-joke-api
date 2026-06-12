@@ -17,20 +17,14 @@ fun Application.configureRouting() {
         staticResources("/content", "mycontent")
 
         get("/") {
-            call.respondText("Welcome to the Gemini Joke API! Use /antigravity/joke?word=yourword to get a funny joke.")
+            call.respondText("Welcome to the Gemini Joke API! Use /thechancejoks/joke?word=yourword to get a funny joke.")
         }
 
-        get("/test1") {
-            val text = "<h1>Hello From Ktor</h1>"
-            val type = ContentType.parse("text/html")
-            call.respondText(text, type)
-        }
-
-        get("/antigravity/joke") {
+        get("/thechancejoks/joke") {
             val word = call.request.queryParameters["word"]
             if (word.isNullOrBlank()) {
                 call.respondText(
-                    "{\"error\":\"Missing query parameter 'word'. Usage: /antigravity/joke?word=topic\"}",
+                    "{\"error\":\"Missing query parameter 'word'. Usage: /thechancejoks/joke?word=topic\"}",
                     ContentType.Application.Json.withCharset(Charsets.UTF_8),
                     HttpStatusCode.BadRequest
                 )
@@ -57,7 +51,7 @@ fun Application.configureRouting() {
         }
     }
 }
-
+//AQ.Ab8RN6IUVJ-2A8_hLpYZFnbJ0XTw0_Y7nMMKiMG5bvb2d7ZhEA
 private fun generateIraqiJoke(word: String): String {
     val apiKey = System.getenv("GEMINI_API_KEY") ?: "AQ.Ab8RN6IUVJ-2A8_hLpYZFnbJ0XTw0_Y7nMMKiMG5bvb2d7ZhEA"
     val randomId = UUID.randomUUID().toString()
@@ -84,7 +78,7 @@ private fun generateIraqiJoke(word: String): String {
 
     val client = HttpClient.newHttpClient()
     val request = HttpRequest.newBuilder()
-        .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=$apiKey"))
+        .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=$apiKey")) //todo change it to flash 3.5
         .header("Content-Type", "application/json")
         .POST(HttpRequest.BodyPublishers.ofString(requestBody))
         .build()
