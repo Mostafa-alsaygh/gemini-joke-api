@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory
  * When a request for a word is made:
  * 1. If there is a cached joke for the word, it returns it immediately (no wait time).
  * 2. If the cache is empty, it generates the first joke synchronously (taking 1-3 seconds).
- *    Immediately after, it triggers a background coroutine task to generate 3 more jokes
- *    for that word and caches them for subsequent requests.
+ *    Immediately after, it triggers a background coroutine task to generate 1 more joke
+ *    for that word and caches it for subsequent requests.
  */
 class CachingJokeService(
     private val delegate: JokeService,
@@ -40,11 +40,11 @@ class CachingJokeService(
         logger.info("Cache miss for word '{}'. Generating joke synchronously.", word)
         val joke = delegate.generateIraqiJoke(word)
 
-        // Launch background task to pre-generate 3 more jokes
+        // Launch background task to pre-generate 1 more joke
         coroutineScope.launch {
-            logger.info("Background task started to generate 3 jokes for word '{}'.", word)
+            logger.info("Background task started to generate 1 joke for word '{}'.", word)
             val jokeQueue = cache.computeIfAbsent(key) { ConcurrentLinkedQueue() }
-            repeat(3) { index ->
+            repeat(1) { index ->
                 try {
                     val extraJoke = delegate.generateIraqiJoke(word)
                     jokeQueue.offer(extraJoke)
