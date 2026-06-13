@@ -26,6 +26,5 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:3.5.0")
     implementation("io.ktor:ktor-client-content-negotiation:3.5.0")
 
-    testImplementation(kotlin("test"))
-    testImplementation(ktorLibs.server.testHost)
+
 }

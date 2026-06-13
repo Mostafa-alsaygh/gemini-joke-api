@@ -4,6 +4,7 @@ import com.example.model.ErrorResponse
 import com.example.model.JokeResponse
 import com.example.service.JokeService
 import com.example.service.GeminiJokeService
+import com.example.service.CachingJokeService
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation as ClientContentNegotiation
 import io.ktor.client.engine.cio.CIO
@@ -42,12 +43,18 @@ fun Application.configureRouting(customJokeService: JokeService? = null) {
     }
 
     // Load configuration & services
-    val jokeService = customJokeService ?: run {
+    val rawJokeService = customJokeService ?: run {
         val apiKey = System.getenv("GEMINI_API_KEY") ?: ""
         if (apiKey.isBlank()) {
             log.warn("GEMINI_API_KEY environment variable is not configured. Outbound joke generation will fail.")
         }
         GeminiJokeService(httpClient, apiKey)
+    }
+
+    val jokeService = if (rawJokeService is CachingJokeService) {
+        rawJokeService
+    } else {
+        CachingJokeService(rawJokeService, this)
     }
 
     routing {
